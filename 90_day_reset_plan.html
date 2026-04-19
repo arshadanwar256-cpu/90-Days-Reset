@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90-Day Reset Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --font-sans: 'Segoe UI', system-ui, sans-serif;
+    --color-bg: #fafaf8;
+    --color-surface: #ffffff;
+    --color-surface-2: #f4f3ef;
+    --color-border: rgba(0,0,0,0.1);
+    --color-border-strong: rgba(0,0,0,0.18);
+    --color-text: #1a1a18;
+    --color-text-secondary: #5a5a56;
+    --color-text-tertiary: #9a9a94;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --purple-50: #EEEDFE; --purple-600: #534AB7; --purple-800: #3C3489;
+    --teal-50: #E1F5EE; --teal-600: #0F6E56; --teal-800: #085041;
+    --amber-50: #FAEEDA; --amber-600: #854F0B; --amber-800: #633806;
+    --green-50: #EAF3DE; --green-600: #3B6D11; --green-800: #27500A;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #181816;
+      --color-surface: #222220;
+      --color-surface-2: #2c2c2a;
+      --color-border: rgba(255,255,255,0.1);
+      --color-border-strong: rgba(255,255,255,0.2);
+      --color-text: #f0f0ec;
+      --color-text-secondary: #a8a8a0;
+      --color-text-tertiary: #68685e;
+      --purple-50: #26215C; --purple-800: #CECBF6;
+      --teal-50: #04342C; --teal-800: #9FE1CB;
+      --amber-50: #412402; --amber-800: #FAC775;
+      --green-50: #173404; --green-800: #C0DD97;
+    }
+  }
+  body { font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.6; min-height: 100vh; }
+  .container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  header { margin-bottom: 2rem; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--purple-50); color: var(--purple-800); padding: 4px 12px; border-radius: 999px; margin-bottom: 0.75rem; }
+  h1 { font-size: 28px; font-weight: 600; color: var(--color-text); margin-bottom: 0.5rem; }
+  .subtitle { font-size: 15px; color: var(--color-text-secondary); }
+
+  .phase-tabs { display: flex; gap: 8px; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .tab { padding: 9px 18px; border-radius: 999px; border: 0.5px solid var(--color-border-strong); font-size: 13px; font-weight: 500; cursor: pointer; background: var(--color-surface); color: var(--color-text-secondary); transition: all 0.15s; line-height: 1.4; }
+  .tab.active { background: var(--purple-50); color: var(--purple-800); border-color: var(--purple-600); }
+  .tab:hover:not(.active) { background: var(--color-surface-2); }
+  .tab small { font-size: 11px; font-weight: 400; display: block; }
+
+  .phase-panel { display: none; }
+  .phase-panel.active { display: block; }
+
+  .phase-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 0.4rem; }
+  .phase-title { font-size: 22px; font-weight: 600; color: var(--color-text); margin-bottom: 0.3rem; }
+  .phase-desc { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.75rem; max-width: 560px; }
+
+  .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 0.75rem; }
+
+  .schedule-grid { display: grid; grid-template-columns: 82px 1fr; gap: 0; margin-bottom: 1.75rem; background: var(--color-surface); border: 0.5px solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
+  .time-slot { display: contents; }
+  .time { font-size: 12px; color: var(--color-text-tertiary); padding: 9px 14px 9px 14px; border-right: 0.5px solid var(--color-border); border-bottom: 0.5px solid var(--color-border); text-align: right; font-weight: 600; background: var(--color-surface-2); }
+  .activity { font-size: 13px; padding: 9px 14px; color: var(--color-text); border-bottom: 0.5px solid var(--color-border); line-height: 1.5; }
+  .time:last-of-type, .activity:last-of-type { border-bottom: none; }
+
+  .pill { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+  .pill-green { background: var(--green-50); color: var(--green-800); }
+  .pill-purple { background: var(--purple-50); color: var(--purple-800); }
+  .pill-amber { background: var(--amber-50); color: var(--amber-800); }
+  .pill-teal { background: var(--teal-50); color: var(--teal-800); }
+
+  .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 1.75rem; }
+  .week-card { background: var(--color-surface-2); border-radius: var(--radius-md); padding: 12px 14px; }
+  .week-num { font-size: 11px; color: var(--color-text-tertiary); font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .week-focus { font-size: 13px; color: var(--color-text); line-height: 1.45; }
+
+  .habit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-bottom: 1.75rem; }
+  .habit-card { background: var(--color-surface); border: 0.5px solid var(--color-border); border-radius: var(--radius-md); padding: 11px 14px; }
+  .habit-name { font-size: 13px; font-weight: 600; color: var(--color-text); margin-bottom: 3px; }
+  .habit-detail { font-size: 12px; color: var(--color-text-secondary); }
+
+  .content-box { background: var(--color-surface); border: 0.5px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 1.75rem; }
+  .content-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .content-row:last-child { margin-bottom: 0; }
+  .content-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; background: var(--purple-50); color: var(--purple-800); font-weight: 600; }
+  .content-text { font-size: 13px; color: var(--color-text); line-height: 1.5; }
+  .content-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
+
+  .divider { border: none; border-top: 0.5px solid var(--color-border); margin: 2rem 0; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 2rem; padding-top: 1.5rem; border-top: 0.5px solid var(--color-border); }
+  .actions p { font-size: 12px; color: var(--color-text-tertiary); width: 100%; margin-bottom: 4px; }
+  .tip-box { background: var(--purple-50); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 1.75rem; }
+  .tip-box p { font-size: 13px; color: var(--purple-800); line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">90-Day Reset</div>
+    <h1>Your Personal Reset Plan</h1>
+    <p class="subtitle">Tahajjud · Fajr · Gym · Deep Work · Instagram · Slow Mornings</p>
+  </header>
+
+  <div class="phase-tabs">
+    <div class="tab active" onclick="switchTab(0)">Phase 1 — Foundations <small>Days 1–30</small></div>
+    <div class="tab" onclick="switchTab(1)">Phase 2 — Building <small>Days 31–60</small></div>
+    <div class="tab" onclick="switchTab(2)">Phase 3 — Mastery <small>Days 61–90</small></div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-panel active" id="panel-0">
+    <div class="phase-label">Phase 1 · Days 1–30</div>
+    <div class="phase-title">Repair the foundation</div>
+    <div class="phase-desc">Fix your sleep schedule, bring prayers back, and ease into gym consistency. Don't try to be perfect — just show up.</div>
+
+    <div class="tip-box"><p>💡 Week 1 goal: sleep by 10:30 PM. That's it. Everything else builds from there.</p></div>
+
+    <div class="section-title">Daily schedule</div>
+    <div class="schedule-grid">
+      <div class="time-slot"><div class="time">4:30 AM</div><div class="activity">Wake up — no phone, drink water <span class="pill pill-purple">new</span></div></div>
+      <div class="time-slot"><div class="time">4:45 AM</div><div class="activity">Tahajjud prayer (2–4 rakah) + dua</div></div>
+      <div class="time-slot"><div class="time">5:15 AM</div><div class="activity">Fajr prayer</div></div>
+      <div class="time-slot"><div class="time">5:30 AM</div><div class="activity">Slow morning — walk, coffee, journal 5 min <span class="pill pill-teal">slow</span></div></div>
+      <div class="time-slot"><div class="time">6:15 AM</div><div class="activity">Gym (3x/week) or light walk (other days)</div></div>
+      <div class="time-slot"><div class="time">7:30 AM</div><div class="activity">Shower + breakfast + Quran (1 page min)</div></div>
+      <div class="time-slot"><div class="time">8:30 AM</div><div class="activity">Plan your 3 top tasks for the day <span class="pill pill-amber">work</span></div></div>
+      <div class="time-slot"><div class="time">9:00 AM</div><div class="activity">Deep work block 1</div></div>
+      <div class="time-slot"><div class="time">12:30 PM</div><div class="activity">Dhuhr + lunch break</div></div>
+      <div class="time-slot"><div class="time">2:00 PM</div><div class="activity">Deep work block 2</div></div>
+      <div class="time-slot"><div class="time">4:00 PM</div><div class="activity">Asr prayer + short rest</div></div>
+      <div class="time-slot"><div class="time">6:30 PM</div><div class="activity">Maghrib prayer</div></div>
+      <div class="time-slot"><div class="time">7:00 PM</div><div class="activity">Content creation / knowledge post (30 min)</div></div>
+      <div class="time-slot"><div class="time">8:00 PM</div><div class="activity">Isha prayer + light dinner</div></div>
+      <div class="time-slot"><div class="time">9:00 PM</div><div class="activity">Wind-down — no reels, book or reflection</div></div>
+      <div class="time-slot"><div class="time">10:00 PM</div><div class="activity">Sleep <span class="pill pill-green">target</span></div></div>
+    </div>
+
+    <div class="section-title">Weekly targets</div>
+    <div class="week-grid">
+      <div class="week-card"><div class="week-num">Week 1</div><div class="week-focus">Sleep by 10:30 PM. Fajr on time 5/7 days</div></div>
+      <div class="week-card"><div class="week-num">Week 2</div><div class="week-focus">Add Tahajjud 3x. Gym 3x. Phone off by 9 PM</div></div>
+      <div class="week-card"><div class="week-num">Week 3</div><div class="week-focus">All 5 prayers on time. 3 planned workdays</div></div>
+      <div class="week-card"><div class="week-num">Week 4</div><div class="week-focus">Review week. Celebrate small wins. No skips</div></div>
+    </div>
+
+    <div class="section-title">Screen time rules</div>
+    <div class="habit-grid">
+      <div class="habit-card"><div class="habit-name">No phone at wake-up</div><div class="habit-detail">First 30 min screen-free</div></div>
+      <div class="habit-card"><div class="habit-name">Reels limit</div><div class="habit-detail">Max 20 min/day, afternoon only</div></div>
+      <div class="habit-card"><div class="habit-name">Night mode</div><div class="habit-detail">Phone away at 9 PM</div></div>
+      <div class="habit-card"><div class="habit-name">Grayscale trick</div><div class="habit-detail">Turn on grayscale after 8 PM</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-panel" id="panel-1">
+    <div class="phase-label">Phase 2 · Days 31–60</div>
+    <div class="phase-title">Build the rhythm</div>
+    <div class="phase-desc">Habits are forming. Now add depth — longer Quran, consistent gym programming, structured deep work, and daily content posting.</div>
+
+    <div class="section-title">What changes from Phase 1</div>
+    <div class="habit-grid">
+      <div class="habit-card"><div class="habit-name">Tahajjud</div><div class="habit-detail">Every night, not just 3x</div></div>
+      <div class="habit-card"><div class="habit-name">Quran</div><div class="habit-detail">1 page → 1 full ruku daily</div></div>
+      <div class="habit-card"><div class="habit-name">Gym</div><div class="habit-detail">4x/week with a program</div></div>
+      <div class="habit-card"><div class="habit-name">Work</div><div class="habit-detail">Time-blocked calendar daily</div></div>
+      <div class="habit-card"><div class="habit-name">Content</div><div class="habit-detail">Daily IG post — reel or story</div></div>
+      <div class="habit-card"><div class="habit-name">Screen</div><div class="habit-detail">Reels only for content research</div></div>
+    </div>
+
+    <div class="section-title">Weekly targets</div>
+    <div class="week-grid">
+      <div class="week-card"><div class="week-num">Week 5</div><div class="week-focus">Zero missed prayers. Wake 4:30 AM daily</div></div>
+      <div class="week-card"><div class="week-num">Week 6</div><div class="week-focus">Post 7 consecutive days on Instagram</div></div>
+      <div class="week-card"><div class="week-num">Week 7</div><div class="week-focus">Full gym program 4x. Meal prep 2 days</div></div>
+      <div class="week-card"><div class="week-num">Week 8</div><div class="week-focus">No doom scroll week. Log screen time</div></div>
+    </div>
+
+    <div class="section-title">Diet focus</div>
+    <div class="content-box">
+      <div class="content-row"><div class="content-icon">S</div><div class="content-text"><strong>Sehri-style breakfast</strong><div class="content-sub">Protein-heavy after Fajr — eggs, dates, oats. Fuels gym and morning focus.</div></div></div>
+      <div class="content-row"><div class="content-icon">L</div><div class="content-text"><strong>Lunch light</strong><div class="content-sub">Rice + protein + greens. Avoid heavy carbs that cause afternoon crash.</div></div></div>
+      <div class="content-row"><div class="content-icon">D</div><div class="content-text"><strong>Dinner before 8 PM</strong><div class="content-sub">Light and early — helps sleep quality by 10 PM.</div></div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-panel" id="panel-2">
+    <div class="phase-label">Phase 3 · Days 61–90</div>
+    <div class="phase-title">Live it without thinking</div>
+    <div class="phase-desc">This is no longer a plan — it's who you are. Sharpen, refine, and prepare to carry this into the next 90 days.</div>
+
+    <div class="section-title">Weekly targets</div>
+    <div class="week-grid">
+      <div class="week-card"><div class="week-num">Week 9</div><div class="week-focus">Review 60-day progress. Adjust what isn't working</div></div>
+      <div class="week-card"><div class="week-num">Week 10</div><div class="week-focus">Reflect on content. What resonated? What didn't?</div></div>
+      <div class="week-card"><div class="week-num">Week 11</div><div class="week-focus">Add one new spiritual habit (e.g. dhikr after Fajr)</div></div>
+      <div class="week-card"><div class="week-num">Week 12</div><div class="week-focus">Write your next 90-day vision. Plan Day 91+</div></div>
+    </div>
+
+    <div class="section-title">Mastery checklist</div>
+    <div class="habit-grid">
+      <div class="habit-card"><div class="habit-name">Prayer</div><div class="habit-detail">All 5 on time, every day</div></div>
+      <div class="habit-card"><div class="habit-name">Sleep</div><div class="habit-detail">10 PM–4:30 AM locked in</div></div>
+      <div class="habit-card"><div class="habit-name">Gym</div><div class="habit-detail">4x/week, no motivation needed</div></div>
+      <div class="habit-card"><div class="habit-name">Quran</div><div class="habit-detail">Daily, with meaning (tafseer)</div></div>
+      <div class="habit-card"><div class="habit-name">Content</div><div class="habit-detail">Consistent voice, growing audience</div></div>
+      <div class="habit-card"><div class="habit-name">Work</div><div class="habit-detail">Top 3 tasks done before noon</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-title">Instagram content — 90 days reset series</div>
+  <div class="content-box">
+    <div class="content-row"><div class="content-icon">1</div><div class="content-text"><strong>Daily knowledge reel</strong><div class="content-sub">1 thing you learned today — about productivity, deen, health, or mindset. 30–60 sec.</div></div></div>
+    <div class="content-row"><div class="content-icon">2</div><div class="content-text"><strong>Morning routine story</strong><div class="content-sub">Quick 9 AM story showing your Tahajjud → Fajr → gym sequence. Raw, no edit needed.</div></div></div>
+    <div class="content-row"><div class="content-icon">3</div><div class="content-text"><strong>Weekly reflection</strong><div class="content-sub">Every Friday — what worked, what didn't, one lesson from the week. Builds trust.</div></div></div>
+    <div class="content-row"><div class="content-icon">4</div><div class="content-text"><strong>Day X posts</strong><div class="content-sub">"Day 7 ✓", "Day 30 update" — milestone posts drive the most saves and shares.</div></div></div>
+  </div>
+
+  <div class="actions">
+    <p>Saved on: April 19, 2026 · Your 90-day journey starts today.</p>
+  </div>
+</div>
+
+<script>
+function switchTab(index) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === index));
+  document.querySelectorAll('.phase-panel').forEach((p, i) => p.classList.toggle('active', i === index));
+}
+</script>
+</body>
+</html>
